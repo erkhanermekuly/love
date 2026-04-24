@@ -1,0 +1,363 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Love Story | Наш сайт</title>
+  <style>
+    :root {
+      --bg-main: #1a0b2e;
+      --bg-soft: #32114f;
+      --pink: #ff4d8d;
+      --pink-light: #ff9fc0;
+      --white-soft: #ffeef5;
+      --card: rgba(255, 255, 255, 0.12);
+      --border: rgba(255, 255, 255, 0.25);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: "Segoe UI", Tahoma, sans-serif;
+      color: #fff;
+      background: radial-gradient(circle at top right, #4d1c6d 0%, var(--bg-main) 50%, #13071f 100%);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .floating-hearts {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .floating-hearts span {
+      position: absolute;
+      bottom: -80px;
+      font-size: clamp(16px, 3vw, 28px);
+      color: rgba(255, 152, 187, 0.45);
+      animation: floatUp linear infinite;
+    }
+
+    .floating-hearts span:nth-child(1) { left: 8%; animation-duration: 12s; animation-delay: 0s; }
+    .floating-hearts span:nth-child(2) { left: 22%; animation-duration: 10s; animation-delay: 2s; }
+    .floating-hearts span:nth-child(3) { left: 35%; animation-duration: 13s; animation-delay: 1.2s; }
+    .floating-hearts span:nth-child(4) { left: 50%; animation-duration: 9s; animation-delay: 3s; }
+    .floating-hearts span:nth-child(5) { left: 66%; animation-duration: 11s; animation-delay: 0.7s; }
+    .floating-hearts span:nth-child(6) { left: 78%; animation-duration: 14s; animation-delay: 2.2s; }
+    .floating-hearts span:nth-child(7) { left: 90%; animation-duration: 10s; animation-delay: 1s; }
+
+    .wrapper {
+      position: relative;
+      z-index: 1;
+      width: min(1120px, 92vw);
+      margin: 0 auto;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(8px);
+      background: rgba(17, 8, 30, 0.65);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 0;
+    }
+
+    .logo {
+      font-size: 1.1rem;
+      letter-spacing: 0.06em;
+      font-weight: 700;
+      color: var(--white-soft);
+      animation: glow 2.4s ease-in-out infinite;
+    }
+
+    .menu {
+      display: flex;
+      gap: 20px;
+      list-style: none;
+    }
+
+    .menu a {
+      color: #ffdbe8;
+      text-decoration: none;
+      transition: color 0.25s ease;
+    }
+
+    .menu a:hover {
+      color: #fff;
+    }
+
+    section {
+      padding: 72px 0;
+    }
+
+    .hero {
+      min-height: 84vh;
+      display: grid;
+      align-items: center;
+      gap: 26px;
+      text-align: center;
+      animation: fadeInUp 1.2s ease;
+    }
+
+    .hero h1 {
+      font-size: clamp(2rem, 6vw, 4rem);
+      line-height: 1.1;
+      text-shadow: 0 6px 28px rgba(255, 77, 141, 0.35);
+    }
+
+    .hero p {
+      width: min(680px, 92%);
+      margin: 0 auto;
+      color: #ffdbe8;
+      font-size: clamp(1rem, 2.2vw, 1.25rem);
+      line-height: 1.8;
+    }
+
+    .love-button {
+      display: inline-block;
+      margin-top: 14px;
+      padding: 12px 24px;
+      border-radius: 999px;
+      text-decoration: none;
+      color: #fff;
+      background: linear-gradient(90deg, #ff4d8d, #ff6aa1);
+      box-shadow: 0 10px 22px rgba(255, 77, 141, 0.35);
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+      animation: pulse 2s infinite;
+    }
+
+    .love-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 16px 28px rgba(255, 77, 141, 0.45);
+    }
+
+    .story-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 22px;
+    }
+
+    .story-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 22px;
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18);
+      transform: translateY(20px);
+      opacity: 0;
+      animation: reveal 0.8s forwards;
+    }
+
+    .story-card:nth-child(2) { animation-delay: 0.15s; }
+    .story-card:nth-child(3) { animation-delay: 0.3s; }
+
+    .story-card h3 {
+      margin-bottom: 10px;
+      color: #fff;
+    }
+
+    .story-card p {
+      color: #f8d8e5;
+      line-height: 1.7;
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 26px;
+      align-items: center;
+    }
+
+    .photo {
+      border-radius: 20px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.08);
+      box-shadow: 0 14px 28px rgba(0, 0, 0, 0.24);
+      transform-origin: center;
+      animation: floatPhoto 4.2s ease-in-out infinite;
+    }
+
+    .photo:nth-child(2) {
+      animation-delay: 1.2s;
+    }
+
+    .photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .quote {
+      margin-top: 34px;
+      text-align: center;
+      color: var(--pink-light);
+      font-size: clamp(1.1rem, 2.2vw, 1.45rem);
+      font-style: italic;
+      animation: fadeIn 1.4s ease;
+    }
+
+    footer {
+      border-top: 1px solid var(--border);
+      background: rgba(13, 6, 23, 0.75);
+      margin-top: 32px;
+    }
+
+    .footer-content {
+      padding: 22px 0;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      color: #f6d4e2;
+      font-size: 0.95rem;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.08); }
+    }
+
+    @keyframes glow {
+      0%, 100% { text-shadow: 0 0 0 rgba(255, 77, 141, 0.2); }
+      50% { text-shadow: 0 0 16px rgba(255, 77, 141, 0.9); }
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(32px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes reveal {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes floatPhoto {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    @keyframes floatUp {
+      0% {
+        transform: translateY(0) rotate(0deg) scale(1);
+        opacity: 0;
+      }
+      15% { opacity: 1; }
+      100% {
+        transform: translateY(-120vh) rotate(360deg) scale(1.15);
+        opacity: 0;
+      }
+    }
+
+    @media (max-width: 700px) {
+      .menu {
+        gap: 12px;
+        font-size: 0.9rem;
+      }
+
+      section {
+        padding: 58px 0;
+      }
+
+      .footer-content {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="floating-hearts" aria-hidden="true">
+    <span>❤</span><span>❤</span><span>❤</span><span>❤</span><span>❤</span><span>❤</span><span>❤</span>
+  </div>
+
+  <header>
+    <div class="wrapper nav">
+      <div class="logo">LOVE FOREVER ❤</div>
+      <ul class="menu">
+        <li><a href="#home">Главная</a></li>
+        <li><a href="#story">Наша история</a></li>
+        <li><a href="#gallery">Фото</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="wrapper">
+    <section class="hero" id="home">
+      <h1>Ты - мое сердце, мой дом и моя бесконечность</h1>
+      <p>
+        Этот сайт - маленькое признание в большой любви.
+        С тобой каждый день наполнен теплом, заботой и счастьем.
+      </p>
+      <a class="love-button" href="#gallery">Смотреть нашу любовь</a>
+    </section>
+
+    <section id="story">
+      <div class="story-grid">
+        <article class="story-card">
+          <h3>Первый взгляд</h3>
+          <p>С той встречи в сердце поселилась особая нежность, которая с каждым днем только сильнее.</p>
+        </article>
+        <article class="story-card">
+          <h3>Каждый момент</h3>
+          <p>Прогулки, разговоры, смех и объятия - это драгоценные кадры нашей истории, которые я храню внутри.</p>
+        </article>
+        <article class="story-card">
+          <h3>Навсегда</h3>
+          <p>Я выбираю тебя сегодня, завтра и всегда. Спасибо, что ты делаешь мой мир прекрасным.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="gallery">
+      <div class="gallery">
+        <figure class="photo">
+          <img src="file:///C:/Users/Admin/.cursor/projects/c-Users-Admin-Desktop/assets/c__Users_Admin_AppData_Roaming_Cursor_User_workspaceStorage_b32b36d23476f1d995109e7cd14ecac9_images_WhatsApp_Image_2026-04-24_at_18.24.29-df1b8a0a-7c8b-4a1d-9828-e3563860047e.png" alt="Наша совместная фотография">
+        </figure>
+        <figure class="photo">
+          <img src="file:///C:/Users/Admin/.cursor/projects/c-Users-Admin-Desktop/assets/c__Users_Admin_AppData_Roaming_Cursor_User_workspaceStorage_b32b36d23476f1d995109e7cd14ecac9_images_WhatsApp_Image_2026-04-24_at_18.24.01-2031806b-9b90-43cc-9075-61effdde053a.png" alt="Нарисованная версия нас">
+        </figure>
+      </div>
+      <p class="quote">"Где есть любовь - там начинается вечность."</p>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrapper footer-content">
+      <p>Сделано с любовью ❤</p>
+      <p>24.04.2026 - Наш маленький мир</p>
+    </div>
+  </footer>
+</body>
+</html>
